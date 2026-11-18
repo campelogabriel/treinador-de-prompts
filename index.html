@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Treinador de Prompts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><symbol id="mk" viewBox="0 0 64 64"><path d="M14 6h36a10 10 0 0 1 10 10v24a10 10 0 0 1-10 10H31L17 60V50h-3A10 10 0 0 1 4 40V16A10 10 0 0 1 14 6z" fill="#1272BA"/><path d="M19 19l10 9-10 9" fill="none" stroke="#F2A900" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M35 37h12" stroke="#fff" stroke-width="5" stroke-linecap="round"/><path d="M49 11l1.9 4.5L55.4 17.4l-4.5 1.9L49 23.8l-1.9-4.5-4.5-1.9 4.5-1.9z" fill="#F2A900"/></symbol></svg>
+<section class="inicio" id="tela-inicio" aria-labelledby="t-ini">
+  <div class="ini-card">
+    <div class="av big" aria-hidden="true"><svg viewBox="0 0 64 64"><use href="#mk" width="64" height="64"/></svg></div>
+    <h1 id="t-ini">Treinador de Prompts</h1>
+    <p class="sub">Antes de começar, conte quem é você.</p>
+    <label for="nome">Como podemos te chamar?</label>
+    <input id="nome" type="text" maxlength="20" autocomplete="off" placeholder="Seu nome ou apelido">
+    <p class="lbl" id="lbl-av">Escolha seu avatar</p>
+    <div class="avs" id="avs" role="radiogroup" aria-labelledby="lbl-av"></div>
+    <button class="go" id="go" type="button" disabled>Começar</button>
+    <p class="note">Use só o primeiro nome ou um apelido. Ele não é salvo e não é enviado para a IA.</p>
+  </div>
+</section>
+<div class="app" id="app" hidden>
+  <header>
+    <div class="av" aria-hidden="true"><svg viewBox="0 0 64 64"><use href="#mk" width="64" height="64"/></svg></div>
+    <div><h1>Treinador de Prompts</h1><small>Escreva um prompt e descubra o nível dele</small></div>
+    <button class="perfil" id="perfil" type="button" aria-label="Trocar nome e avatar"><span id="p-av" aria-hidden="true"></span><span id="p-nome"></span></button>
+    <button class="ghost" id="nova" type="button">Nova conversa</button>
+  </header>
+  <main id="chat" aria-live="polite"></main>
+  <footer>
+    <div class="box">
+      <textarea id="prompt" rows="2" placeholder="Escreva seu prompt aqui…" aria-label="Seu prompt"></textarea>
+      <button class="send" id="enviar" type="button" aria-label="Enviar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
+    </div>
+    <p class="note">Enter envia, Shift+Enter pula linha. Não escreva nome, endereço ou dados pessoais.</p>
+    <div class="parc"><span>Curso oferecido por</span><span class="pl"><img src="assets/oficina-do-sucesso.png" alt="Oficina do Sucesso Rocinha"></span><img class="cn" src="assets/conecta.png" alt="Conecta"></div>
+  </footer>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
