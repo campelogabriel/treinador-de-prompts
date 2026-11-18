@@ -47,9 +47,24 @@ function cartaoNivel(a){
   return b;
 }
 async function viaProxy(){
-  const res=await fetch(PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({regras:REGRAS,mensagens:turns})});
-  if(!res.ok)throw {code:'upstream_error'};
-  const j=await res.json();return {text:j.texto};
+  let ultimo=null;
+  for(let i=0;i<3;i++){
+    const ctrl=new AbortController(),t=setTimeout(()=>ctrl.abort(),30000);
+    try{
+      const res=await fetch(PROXY_URL,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({regras:REGRAS,mensagens:turns}),signal:ctrl.signal});
+      clearTimeout(t);
+      if(res.ok){
+        const j=await res.json();
+        if(j&&j.texto)return {text:j.texto};
+        ultimo='resposta vazia';
+      }else{
+        ultimo='erro '+res.status;
+        if(res.status<500&&res.status!==429)break;
+      }
+    }catch(e){clearTimeout(t);ultimo='sem conexão com o servidor';}
+    await new Promise(r=>setTimeout(r,1200*(i+1)));
+  }
+  throw {msg:'Não consegui falar com a IA agora ('+ultimo+'). Tente enviar de novo.'};
 }
 async function enviar(){
   if(busy)return;const p=ta.value.trim();if(!p)return;
@@ -64,7 +79,7 @@ async function enviar(){
     if(d.avaliacao)ponha(cartaoNivel(d.avaliacao));
     else{const w=el('div','bub','Não consegui avaliar esse prompt agora. Tente enviar de novo.');ponha(w);}
   }catch(e){
-    turns.pop();b.textContent=e.text||ERROS[e.code]||'Algo deu errado. Tente enviar de novo.';if(!e.text)b.parentElement.classList.add('err');
+    turns.pop();b.textContent=e.text||e.msg||ERROS[e.code]||'Algo deu errado. Tente enviar de novo.';if(!e.text)b.parentElement.classList.add('err');
   }
   busy=false;btn.disabled=false;ta.focus();
 }
