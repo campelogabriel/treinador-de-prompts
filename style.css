@@ -42,9 +42,10 @@ textarea::placeholder{color:var(--mut)}
 .send:hover:not(:disabled){transform:translateY(-2px)}
 .send:disabled{opacity:.4;cursor:default}
 .note{margin:6px 4px 0;font-size:12px;color:var(--mut)}
-.parc{display:flex;align-items:center;gap:8px;margin:8px 4px 0;font-size:11px;color:var(--mut);flex-wrap:wrap}
-.pl{background:#fff;border-radius:999px;padding:3px 12px;display:inline-flex;border:1px solid var(--line)}
-.pl img{height:18px;width:auto;display:block}
+.parc{display:flex;align-items:center;gap:6px;margin:8px 4px 0;font-size:11px;color:var(--mut);flex-wrap:wrap}
+.pl{background:transparent;border:0;border-radius:10px;padding:4px 14px;display:inline-flex;align-items:center;flex:none;transition:transform .15s,background .15s}
+.pl:hover{transform:translateY(-1px);background:var(--soft)}
+.pl img{height:28px;width:auto;max-width:none;object-fit:contain;display:block;flex:none}
 
 /* tela inicial */
 .inicio{position:relative;min-height:100%;display:grid;place-items:center;padding:20px;background:radial-gradient(ellipse at 15% 0,rgba(18,114,186,.16),transparent 55%),radial-gradient(ellipse at 100% 100%,rgba(242,169,0,.14),transparent 50%),var(--bg)}
@@ -65,18 +66,14 @@ textarea::placeholder{color:var(--mut)}
 .ini-card .note{margin-top:12px}
 
 /* "Pensando": mascote pulsa, pontinhos pulam e a frase troca */
-.bub.pensa{display:flex;align-items:center;gap:12px;background:linear-gradient(100deg,var(--soft) 30%,var(--card) 50%,var(--soft) 70%);background-size:250% 100%;animation:brilho 2.2s linear infinite}
+.bub.pensa{display:flex;align-items:baseline;gap:2px;color:var(--mut)}
 .msg.think .av{animation:pulso 1.3s ease-in-out infinite}
-.pts{display:inline-flex;gap:5px;align-items:center}
-.pts i{width:8px;height:8px;border-radius:50%;background:var(--brand);animation:pula 1s ease-in-out infinite}
-.pts i:nth-child(2){animation-delay:.15s;background:var(--gold)}
-.pts i:nth-child(3){animation-delay:.3s}
-.ptx{color:var(--mut);font-size:14px}
-.ptx.troca{animation:entra .35s ease-out}
-@keyframes pula{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-8px)}}
+.pts{display:inline-flex;gap:1px;font-weight:700;color:var(--brand);font-size:20px;line-height:1}
+.pts i{font-style:normal;opacity:0;animation:ponto 1.4s infinite}
+.pts i:nth-child(2){animation-delay:.25s}
+.pts i:nth-child(3){animation-delay:.5s}
+@keyframes ponto{0%,15%{opacity:0;transform:translateY(3px)}35%,70%{opacity:1;transform:none}90%,100%{opacity:0}}
 @keyframes pulso{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.14) rotate(-6deg)}}
-@keyframes brilho{to{background-position:-150% 0}}
-@keyframes entra{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 
 /* cartão de nível */
 .bub p{margin:0}.bub p+p{margin-top:6px}
