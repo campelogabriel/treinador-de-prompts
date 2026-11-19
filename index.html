@@ -19,13 +19,15 @@
   <div class="ini-card">
     <div class="av big" aria-hidden="true"><svg viewBox="0 0 64 64"><use href="#mk" width="64" height="64"/></svg></div>
     <h1 id="t-ini">Treinador de Prompts</h1>
-    <p class="sub">Escreva, veja a resposta da IA e suba de nível.</p>
+    <p class="sub">Escreva, veja a resposta da IA e melhore seu prompt.</p>
+    <ol class="passos"><li><b>Escreva</b>um prompt do seu jeito</li><li><b>Veja</b>a resposta e o feedback</li><li><b>Melhore</b>e envie de novo</li></ol>
     <label for="nome">Como podemos te chamar?</label>
     <input id="nome" type="text" maxlength="20" autocomplete="off" placeholder="Seu nome ou apelido">
     <p class="lbl" id="lbl-av">Escolha seu avatar</p>
     <div class="avs" id="avs" role="radiogroup" aria-labelledby="lbl-av"></div>
     <button class="go" id="go" type="button" disabled>Começar</button>
     <p class="note">Use só o primeiro nome ou um apelido. Ele não é salvo e não é enviado para a IA.</p>
+    <div class="parc ini-parc"><span>Curso oferecido por</span><a class="pl" href="https://www.instagram.com/oficina_do_sucesso_rocinha/" target="_blank" rel="noopener noreferrer" aria-label="Instagram da Oficina do Sucesso Rocinha (abre em nova aba)"><img src="assets/oficina-do-sucesso.png" alt="Oficina do Sucesso Rocinha"></a><a class="pl" href="https://www.instagram.com/cconecta.br/" target="_blank" rel="noopener noreferrer" aria-label="Instagram da Conecta (abre em nova aba)"><img src="assets/conecta.png" alt="Conecta"></a></div>
   </div>
 </section>
 <div class="app" id="app" hidden>
@@ -34,15 +36,16 @@
     <div class="tit"><h1>Treinador de Prompts</h1><small>Escreva um prompt e descubra o nível dele</small></div>
     <button class="perfil" id="perfil" type="button" aria-label="Trocar nome e avatar"><span class="pav" id="p-av" aria-hidden="true"></span><span id="p-nome"></span></button>
     <button class="tema ghost icon" type="button"></button>
+    <button class="baixar ghost icon" id="baixar" type="button" aria-label="Baixar conversa" title="Baixar conversa">⬇️</button>
     <button class="ghost" id="nova" type="button">Nova conversa</button>
   </header>
   <main id="chat" aria-live="polite"></main>
   <footer>
     <div class="box">
-      <textarea id="prompt" rows="2" placeholder="Escreva seu prompt aqui…" aria-label="Seu prompt"></textarea>
+      <textarea id="prompt" rows="2" maxlength="2000" placeholder="Escreva seu prompt aqui…" aria-label="Seu prompt"></textarea>
       <button class="send" id="enviar" type="button" aria-label="Enviar"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg></button>
     </div>
-    <p class="note">Enter envia, Shift+Enter pula linha. Não escreva nome, endereço ou dados pessoais.</p>
+    <div class="nota-linha"><p class="note"><span id="dica-env">Enter envia, Shift+Enter pula linha.</span> Não escreva nome, endereço ou dados pessoais.</p><span class="cont" id="cont">0/2000</span></div>
     <div class="parc"><span>Curso oferecido por</span><a class="pl" href="https://www.instagram.com/oficina_do_sucesso_rocinha/" target="_blank" rel="noopener noreferrer" aria-label="Instagram da Oficina do Sucesso Rocinha (abre em nova aba)"><img src="assets/oficina-do-sucesso.png" alt="Oficina do Sucesso Rocinha"></a><a class="pl" href="https://www.instagram.com/cconecta.br/" target="_blank" rel="noopener noreferrer" aria-label="Instagram da Conecta (abre em nova aba)"><img src="assets/conecta.png" alt="Conecta"></a></div>
   </footer>
 </div>
