@@ -13,7 +13,7 @@ Responda SOMENTE com JSON válido, neste formato: {"resposta":"...","avaliacao":
 const ERROS={not_granted:'Você não permitiu o uso da IA nesta página. Recarregue e aceite para conversar.',rate_limited:'Muitas perguntas seguidas. Espere um pouco e tente de novo.',refused:'A IA não pôde responder a esse pedido. Tente escrever de outro jeito.',sampling_disabled:'A IA não está disponível nesta conta.'};
 const $=id=>document.getElementById(id);
 const chat=$('chat'),ta=$('prompt'),btn=$('enviar');
-let SAMPLE=null,turns=[],busy=false,nivelAnterior=null;
+let SAMPLE=null,turns=[],busy=false;
 (window.claude&&claude.use?claude.use('sample'):Promise.resolve(null)).then(s=>{SAMPLE=s;}).catch(()=>{});
 const el=(t,c,x)=>{const e=document.createElement(t);if(c)e.className=c;if(x!=null)e.textContent=x;return e;};
 
@@ -41,9 +41,7 @@ document.querySelectorAll('.tema').forEach(b=>b.onclick=()=>{const n=document.do
 atualizaTema();
 
 function msg(who,texto){const m=el('div','msg '+who);if(who!=='me'){const a=el('div','av');a.innerHTML='<svg viewBox="0 0 64 64"><use href="#mk" width="64" height="64"/></svg>';m.appendChild(a);}if(who==='me'&&perfil){const u=el('div','uav');u.innerHTML=avSvg(perfil.avatar);m.appendChild(u);}const b=el('div','bub',texto);m.appendChild(b);chat.appendChild(m);chat.scrollTop=chat.scrollHeight;return b;}
-function inicio(){chat.innerHTML='';turns=[];nivelAnterior=null;msg('ai','Oi, '+perfil.nome+'! Escreva um prompt do jeito que quiser. Eu mostro como a IA responde e avalio o nível do seu prompt. Depois melhore o texto e envie de novo para ver o nível subir.');}
-const NIVEIS=[null,{n:'Iniciante'},{n:'Em evolução'},{n:'Bom'},{n:'Excelente'}];
-const CRITERIOS={objetivo:'Objetivo',contexto:'Contexto',publico:'Público',formato:'Formato',tamanho:'Tamanho',personagem:'Personagem',exemplos:'Exemplos',restricoes:'Restrições'};
+function inicio(){chat.innerHTML='';turns=[];msg('ai','Oi, '+perfil.nome+'! Escreva um prompt do jeito que quiser. Eu mostro como a IA responde e avalio o nível do seu prompt. Depois melhore o texto e envie de novo para ver o nível subir.');}
 function ponha(bub){const m=el('div','msg ai'),a=el('div','av');a.innerHTML='<svg viewBox="0 0 64 64"><use href="#mk" width="64" height="64"/></svg>';m.append(a,bub);chat.appendChild(m);chat.scrollTop=chat.scrollHeight;}
 
 // Animação de "Pensando": os pontinhos aparecem e somem em sequência
@@ -59,21 +57,9 @@ function lerResposta(txt){
   try{const j=JSON.parse(limpo);if(j&&typeof j.resposta==='string')return j;}catch(e){}
   return {resposta:String(txt),avaliacao:null};
 }
-function cartaoNivel(a){
-  const n=Math.min(4,Math.max(1,parseInt(a.nivel,10)||1)),info=NIVEIS[n];
-  const b=el('div','bub aval lv'+n);
-  b.appendChild(el('span','tag','Nível do seu prompt'));
-  const topo=el('div','nv-topo'),nm=el('strong','nv-nome',info.n);
-  topo.append(nm,el('span','nv-num','Nível '+n+' de 4'));b.appendChild(topo);
-  const med=el('div','medidor');med.setAttribute('role','img');med.setAttribute('aria-label','Nível '+n+' de 4: '+info.n);
-  const segs=[];for(let i=1;i<=4;i++){const s=el('i');med.appendChild(s);if(i<=n)segs.push(s);}
-  b.appendChild(med);
-  setTimeout(()=>segs.forEach(s=>s.classList.add('on')),80);
-  if(nivelAnterior!==null&&nivelAnterior!==n)b.appendChild(el('p','nv-delta',n>nivelAnterior?'Subiu do nível '+nivelAnterior+' para o '+n+'!':'Caiu do nível '+nivelAnterior+' para o '+n+'. O que mudou no prompt?'));
-  nivelAnterior=n;
-  const ch=el('div','chips');
-  Object.keys(CRITERIOS).forEach(k=>{const ok=!!(a.criterios&&a.criterios[k]===true);ch.appendChild(el('span','chip'+(ok?' ok':''),(ok?'✓ ':'○ ')+CRITERIOS[k]));});
-  b.appendChild(ch);
+function cartaoFeedback(a){
+  const b=el('div','bub aval');
+  b.appendChild(el('span','tag','Feedback do Professor de Prompts'));
   const ac=(Array.isArray(a.acertos)?a.acertos:[]).slice(0,2).map(String).filter(Boolean);
   if(ac.length){b.appendChild(el('p','nv-sec','O que você fez bem'));ac.forEach(x=>b.appendChild(el('p',null,'• '+x)));}
   if(a.melhorar){b.appendChild(el('p','nv-sec','Para melhorar'));b.appendChild(el('p',null,String(a.melhorar)));}
@@ -110,7 +96,7 @@ async function enviar(){
     const r=PROXY_URL?await viaProxy():await SAMPLE([{role:'user',content:REGRAS},...turns],{modelTier:'quick',cache:false});
     const d=lerResposta(r.text);turns.push({role:'assistant',content:r.text});
     pen.parar();b.append(el('span','tag','Resposta da IA ao seu prompt'),el('p',null,d.resposta));
-    if(d.avaliacao)ponha(cartaoNivel(d.avaliacao));
+    if(d.avaliacao)ponha(cartaoFeedback(d.avaliacao));
     else{const w=el('div','bub','Não consegui avaliar esse prompt agora. Tente enviar de novo.');ponha(w);}
   }catch(e){
     turns.pop();pen.parar();b.textContent=e.text||e.msg||ERROS[e.code]||'Algo deu errado. Tente enviar de novo.';if(!e.text)b.parentElement.classList.add('err');
