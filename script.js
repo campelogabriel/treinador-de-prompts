@@ -46,14 +46,12 @@ const NIVEIS=[null,{n:'Iniciante'},{n:'Em evolução'},{n:'Bom'},{n:'Excelente'}
 const CRITERIOS={objetivo:'Objetivo',contexto:'Contexto',publico:'Público',formato:'Formato',tamanho:'Tamanho',personagem:'Personagem',exemplos:'Exemplos',restricoes:'Restrições'};
 function ponha(bub){const m=el('div','msg ai'),a=el('div','av');a.innerHTML='<svg viewBox="0 0 64 64"><use href="#mk" width="64" height="64"/></svg>';m.append(a,bub);chat.appendChild(m);chat.scrollTop=chat.scrollHeight;}
 
-// Animação de "Pensando": mascote pulsa, pontinhos pulam e a frase muda
-const FRASES=['Lendo o seu prompt…','Procurando o objetivo…','Olhando contexto e público…','Conferindo o formato…','Montando o seu nível…'];
+// Animação de "Pensando": os pontinhos aparecem e somem em sequência
 function pensando(){
-  const b=msg('ai','');b.classList.add('pensa');b.parentElement.classList.add('think');
-  const pts=el('span','pts');pts.setAttribute('aria-hidden','true');for(let i=0;i<3;i++)pts.appendChild(el('i'));
-  const tx=el('span','ptx',FRASES[0]);b.append(pts,tx);
-  let k=0;const t=setInterval(()=>{k=(k+1)%FRASES.length;tx.textContent=FRASES[k];tx.classList.remove('troca');void tx.offsetWidth;tx.classList.add('troca');},1800);
-  return {b,parar:()=>{clearInterval(t);b.classList.remove('pensa');b.parentElement.classList.remove('think');b.textContent='';}};
+  const b=msg('ai','Pensando');b.classList.add('pensa');b.parentElement.classList.add('think');
+  const pts=el('span','pts');pts.setAttribute('aria-hidden','true');for(let i=0;i<3;i++)pts.appendChild(el('i',null,'.'));
+  b.appendChild(pts);
+  return {b,parar:()=>{b.classList.remove('pensa');b.parentElement.classList.remove('think');b.textContent='';}};
 }
 
 function lerResposta(txt){
